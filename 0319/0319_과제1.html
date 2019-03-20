@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>To-do</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+        <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <style>
+        body{
+            overflow-x: hidden;
+            background:url("https://images.unsplash.com/photo-1501630834273-4b5604d2ee31?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80") no-repeat;
+            background-size: cover;
+        }
+        #wrapper{
+            text-align: center;
+        }
+        .mdl-button.mdl-js-button.done{
+        margin: 0 20px;
+        }
+        li{
+            color: white;
+            text-shadow: 0px 0px 5px black;
+            font-size: 1.2em;
+            list-style-type: none;
+        }
+        #time{
+            display: inline-block;
+            width: 100%;
+            height: 30px;
+            font-size: 1.2em;
+            color:rgb(255, 255, 255);
+            text-shadow: 0 0 5px black;
+        }
+        #form{
+            margin: 30px 0;
+        }
+        h3{
+            margin-top: 100px;
+            color: white;
+            text-shadow: 0 0 5px black
+        }
+        .mdl-textfield.mdl-js-textfield.mdl-textfield--floating-label{
+            width: 200px;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="wrapper">
+        <h3 id="n"></h3>
+        <form action="#" id="naming">
+            <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="sample1" autocomplete="off">
+                <label class="mdl-textfield__label" for="sample1">What's your name?</label>
+            </div>
+            <input type="submit" value="Submit" class="mdl-button mdl-js-button name">
+        </form>
+            <div id="time"></div>
+            <form action="#" id="todo-form">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="sample3" autocomplete="off">
+                    <label class="mdl-textfield__label" for="sample3">Write a to-do</label>
+                </div>
+                <input type="submit" value="Add" class="mdl-button mdl-js-button">
+                <input type="button" value="Delete All" id="btn" class="mdl-button mdl-js-button">
+            </form>
+            <ul id="todo_list"></ul>
+        </div>
+     <script type="text/javascript">
+
+        $(function(){
+        function name(){
+            var get_name = localStorage.getItem("name");
+            if(get_name !== null){
+                $('#n').text('Hello, '+get_name);
+                $('#naming').hide();
+            }
+        }
+        function loadTodo(){
+            var get_todo = JSON.parse(localStorage.getItem("my-todos"));
+            if(get_todo !== null){
+                $("#todo_list").append(get_todo);
+            }
+            
+        }
+        name();
+        loadTodo();
+        
+
+        $('#naming').submit(function(e){
+            e.preventDefault();
+            var name = document.getElementById('sample1').value;
+            localStorage.setItem('name',name);
+            $('#n').text('Hello, '+name);
+            $('#naming').remove();
+            alert("Nice to meet you, "+localStorage.getItem('name'));
+        });
+
+        $('#todo-form').submit(function(e){
+        e.preventDefault();
+        todo = $('input[id="sample3"]').val();
+        my_todo = '<li class="todo"><span class="text">▶ '+todo+'</span><button type="button" class="mdl-button mdl-js-button done">✔</button></li>';
+        $("#todo_list").append(my_todo);
+        saveTodo();
+        document.getElementById("sample3").value="";
+        });
+
+        function saveTodo(){
+            var todos = [];
+            todos.push(document.getElementById("todo_list").innerHTML);
+            var my_todos = JSON.stringify(todos);
+            localStorage.setItem("my-todos", my_todos);
+        }
+
+        
+        
+        $('#btn').click(function(e){
+            $('li').remove();
+            saveTodo();
+        });
+
+        $(document).on("click",".mdl-button.mdl-js-button.done", function(){
+            $(this).closest(".todo").remove();
+            saveTodo();
+           
+        })
+    
+        $(document).on("click",".text",function(){
+            var edit_form = $('<span><input type="text"><button type="button" class="mdl-button mdl-js-button edit">Edit</button></span>');
+            if(!$(this).hasClass("added")){
+                $(this).parent().append(edit_form);
+                $(this).addClass("added");
+            }
+        });
+
+        $(document).on("click", ".mdl-button", function() {
+            var a = $(this).siblings("input").val();
+            $(this).parent().parent().children(".text").text("▶ "+a);
+            $(this).parent().parent().children(".text").removeClass("added");
+        })
+
+        $(document).on("click",".mdl-button.mdl-js-button.edit", function(){
+            $(this).closest("span").remove();
+            saveTodo();
+        });
+
+       
+        window.setInterval(function() {
+            var dt = new Date();
+            var current_time = dt.toLocaleTimeString();
+            document.getElementById("time").innerHTML = current_time;
+        }, 1000); 
+        
+    });
+
+
+        </script>
+    </body>
+</html>

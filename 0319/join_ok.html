@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>회원가입 목록</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <style>
+        h1{
+            text-align: center;
+        }
+         #wrapper{
+            width: 700px;
+            margin: 0 auto;
+            text-align: center;
+         }
+
+        form{
+            display: inline-block;
+            border: 1px solid lightgrey;
+            padding: 20px;
+        }
+        input{
+            margin: 5px 0
+        }
+        </style>
+    </head>
+    <body>
+        <h1>회원 목록</h1>
+        <div id="wrapper">
+            
+        </div>
+        <script>
+            $(function(){
+                var t = 1; // 아이디를 설정하기 위한 변수
+                for(var a in localStorage){ // a = 로컬스토리지 키들
+                    var check = JSON.parse(localStorage.getItem(a)); // 받아서 객체로 바꿈
+                    if(check !== null && Object.keys(check)[0] === "id"){ // id 키가 있는 객체라면
+                      $("#wrapper").append('<form action="#" id="join">'+
+                                            '<label> 아이디 : '+
+                                            '<input type="text" name="id" id="id'+t+'"></label><br>'+
+                                            '<label> 비밀번호 : '+
+                                            '<input type="password" name="pw" id="pw'+t+'"></label><br>'+
+                                            '<label> 이름 : '+
+                                            '<input type="text" name="name" id="name'+t+'"></label><br>'+
+                                            '<label> 이메일 주소 : '+
+                                            '<input type="email" name="email" id="email'+t+'"></label><br>'+
+                                            '<label> 집주소 : '+
+                                            '<input type="text" name="address" id="address'+t+'"></label>'+
+                                            '</form>'); // 이 포맷을 html 에 집어넣고
+                        for (var key in check){ // 객체의 키 수만큼 도는 반복문
+                         $("#"+key+t).val(check[key]); // 키와 매치하는 인풋밸류를 키값으로 바꿈
+                        } 
+                    } t = t+1; // 변수를 바꿔서 새로운 아이디를 가진 인풋들을 생성할 수 있도록 함
+                }
+            });
+               
+                
+        </script>
+    </body>
+</html>
