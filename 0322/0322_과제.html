@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WeMakePrice 따라하기</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+    #fix_wrapper{
+        position: fixed;
+        width: 100%;
+        bottom: -300px;
+    }
+    #fix{
+        width:100%;
+        border-bottom: 2px solid red;
+        z-index: 200;
+        padding-left: 60%;
+    }
+    #fix2{
+        width:100%;
+        height: 310px;
+        background:white;
+        z-index:200;
+        padding: 0 200px;
+        position:relative;
+    }
+    #fix3{
+        display:none;
+        width:100%;
+        height: 310px;
+        background:white;
+        z-index:200;
+        padding: 0 200px;
+        position:relative;
+    }
+    .btn.fix_btn{
+        padding: 1em 2.5em;
+    }
+    .btn.btn-dark.exit{
+        padding: 0.3rem .75rem;
+        font-size: 0.8rem;
+        position: absolute;
+        left: 85%;
+        display:none;
+    }
+    .btn.opt1{
+        padding: 20px 40px;
+        font-size: 15px;
+    }
+    .btn.opt2{
+        padding: 20px 55px;
+        font-size: 15px;
+    }
+    #t_basket{
+        width: 75%;
+        border-collapse: collapse;
+        border: 1.5px solid rgb(172, 172, 172);
+        border-bottom: 2px solid rgb(70, 70, 70);
+    }
+    
+    #t_basket td{
+        border-top:2px solid rgb(70, 70, 70);
+        border-left: 1px solid rgb(201, 201, 201);
+        border-bottom: 1.5px solid rgb(172, 172, 172);
+        text-align:center;
+        font-size: 14px;
+    }
+    #item{
+        width: 350px;
+    }
+    #no_list td{
+        border: none;
+        padding:100px 0;
+        overflow-y: scroll;
+    }
+    #my_price{
+        position:absolute;
+        top:40px;
+        left:70%;
+        width: 15%;
+    }
+    #my_option{
+        position:absolute;
+        top:60px;
+        left:70%;
+        width: 15%;
+    }
+    
+    #my_price td{
+        font-size: 14px;
+        line-height: 30px;
+    }
+    #my_price .zero{
+        text-align: right;
+    }
+    #t_option{
+        width:75%;
+    }
+    #opt{
+        text-align: center;
+        background:rgb(231, 231, 231);
+        font-size: 13px;
+    }
+    #wrapper{
+        width: 1000px;
+        height: 100%;
+        margin: 30px auto 30px auto;
+    }
+    #left{
+        width:50%;
+        height:100%;
+        border: 1px solid rgb(192, 192, 192);
+    }
+    #right{
+        width:50%;
+        height: 100%;
+        padding: 30px;
+        border: 1px solid rgb(192, 192, 192);
+    }
+    span{
+        font-size: 13px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+    h5{
+        margin-bottom: 50px;
+    }
+    h6, h2{
+        display:inline-block;
+        margin-bottom:30px;
+    }
+    .btn-secondary.q{
+        display:block;
+        margin-left: 90px;
+        color: rgb(192, 192, 192);
+        background-color: white;
+        border-color: #dbdbdb;
+        padding:2px;
+        font-size: 11px;
+        border-radius: 0;
+    }
+    .btn-outline-danger{
+        display:block;
+        font-size: 12px;
+        padding:2px;
+        border-radius:0;
+    }
+    .num{
+        font-size:13px; 
+        color:grey;
+    }
+    .choose{
+        font-size: 12px;
+        width:100%;
+    }
+    .won{
+        display:inline-block;
+        margin-left: 10px;
+        color:red;
+        font-size:20px;
+    }
+    .price{
+        text-align:right;
+    }
+    .btn-light{
+        border: 1.5px solid rgb(196, 196, 196);
+    }
+    .btn-danger{
+        padding: 0.375rem 2rem;
+    }
+   
+    .link_test{
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: url("images/sprite.png") no-repeat -78px -159px;
+            overflow: hidden;
+            text-indent: -999px;
+    }
+    .link_test_click{
+        background: url("images/sprite.png") no-repeat -52px -159px;
+    }
+    #wrapper2{
+        width:1000px;
+        height: 800px;
+        margin: 0 auto;
+    }
+    nav > .nav.nav-tabs{
+        border: none;
+        color:grey;
+        background:white;
+        border-radius:0;
+
+        }
+        nav > div a.nav-item.nav-link,
+        nav > div a.nav-item.nav-link.active
+        {
+        border: 1px solid rgb(214, 214, 214);
+        color:rgb(131, 131, 131);
+        background:rgb(233, 233, 233);
+        border-radius:0;
+        padding:20px 0;
+        margin: 0 5px;
+        }
+
+        nav > div a.nav-item.nav-link.active:after
+        {
+        content: "";
+        position: relative;
+        bottom: -60px;
+
+        }
+        .tab-content{
+        background: #fdfdfd;
+        line-height: 25px;
+        border: 1px solid rgb(214, 214, 214);
+        padding:30px 25px;
+        }
+
+        nav > div a.nav-item.nav-link:hover,
+        nav > div a.nav-item.nav-link:focus
+        {
+        border: 1px solid rgb(214, 214, 214);
+        background: white;
+        color:rgb(51, 51, 51);
+        border-radius:0;
+        }
+        .row {
+        margin-right: 0;
+        margin-left: 0;
+        }
+        .tab-pane.fade{
+        margin:30px;
+        }
+        #wrapper3{
+            width:100%;
+            margin: 20px 0;
+        }
+        #notice{
+            width:50%;
+            border:1px solid grey;
+            padding: 5px 20px;
+        }
+        #notice_content{
+            margin-top:20px;
+            font-size:12px;
+            line-height:15px;
+        }
+        #span_color{
+            font-size:12px; 
+            color:rgb(0, 133, 115);
+        }
+        #list{
+            font-size:12px;
+        }
+        #review_div{
+            width: 100%;
+            height: 130px;
+            border: 1px solid rgb(197, 197, 197);
+            padding: 25px 100px;
+        }
+        .btn.btn-danger.review{
+            float:right;
+            padding: 1.5rem 2rem;
+            border-radius: 0;
+            border: none;
+            background:rgb(218, 90, 90);
+        }
+        .starR{
+        background: url('http://miuu227.godohosting.com/images/icon/ico_review.png') no-repeat right 0;
+        background-size: auto 100%;
+        width: 30px;
+        height: 30px;
+        display: inline-block;
+        text-indent: -9999px;
+        cursor: pointer;
+}
+        .starR.on{background-position:0 0;}
+        .starR.on2{background-position: 0 0;
+                   width: 13px;}
+        #star{
+            float:left;
+        }
+        .starRev{
+            width: 200px;
+            padding-left: 30px;
+        }
+        #qna{
+            border: 1px solid rgb(192, 192, 192);
+            width:100%;
+            height:280px;
+            padding: 30px 44px;
+        }
+        .btn.btn-outline-dark{
+            padding: 1.8rem 1.2rem;
+            margin: 0 0 70px;
+        }
+        #q{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+    <div id="fix_wrapper">
+    <div id="fix">
+        <button type="button" class="btn btn-danger fix_btn" id="basket">장바구니</button>
+        <button type="button" class="btn btn-secondary fix_btn"  id="ch_opt">옵션선택</button><br>
+    </div>
+    <div id="fix2">
+        <span style="padding-top:10px;">장바구니 자세히보기 > </span>
+        <button type="button" class="btn btn-dark exit">닫기</button>
+        <table id="t_basket">
+            <thead>
+                <tr>
+                  <td id="item" style="border-left: none;">상품명</td>
+                  <td id="item_price">판매가격</td>
+                  <td>수량</td>
+                  <td>합계</td>
+                  <td>배송비</td>
+                </tr>
+                <tr id="no_list">
+                  <td colspan="5">장바구니에 등록된 상품이 없습니다.</td>
+                </tr>
+            </thead>
+        </table>
+        <table id="my_price">
+            <tr>
+                <td>정상가격</td>
+                <td class="zero">0원</td>
+            </tr>
+            <tr>
+                <td>할인가격</td>
+                <td class="zero">0원</td>
+            </tr>
+            <tr style="border-bottom: 2px solid rgb(201, 201, 201);">
+                <td>총 배송비</td>
+                <td class="zero">0원</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="color:red;">총 결제 예정금액</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: right; font-size:30px; color:red;"><b>0</b>원</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center; padding-top:30px">
+                    <button type="button" class="btn btn-danger opt1">즉시 구매</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fix3">
+        <button type="button" class="btn btn-dark exit">닫기</button>
+        <table id="t_option">
+            <tr style="height:35px;">
+                <td><b>[원더쿠폰] 네이센트 소이 캔들 향초</b></td>
+                <td style="text-align: right;">· 최대 구매수량: 100개</td>
+            </tr>
+            <tr>
+                <td colspan="2" style="padding:0 0 10px 0;">
+                    <form action="#">
+                        <select name="향선택" class="choose">
+                            <option value="choice">향선택</option>
+                            <option value="01">01_면심지_7oz버가못</option>
+                            <option value="02">01_면심지_7oz블랙체리</option>
+                            <option value="03">01_면심지_7oz샌달우드N머스크</option>
+                            <option value="04">01_면심지_7oz웨딩데이</option>
+                        </select>
+                    </form>
+                </td>
+            </tr>
+            <tr id="no_list">
+                <td colspan="2" id="opt">
+                    옵션을 선택해 주세요.
+                </td>
+            </tr>
+        </table>
+        <table id="my_option">
+            <tr>
+                <td>총 상품금액</td>
+            </tr>
+            <tr>
+                <td style="text-align: right; font-size:30px; color:red;"><b>0</b>원</td>
+            </tr>
+            <tr>
+                <td style="text-align: center; padding-top:30px">
+                    <button type="button" class="btn btn-light opt1">장바구니 담기</button><br>
+                    <button type="button" class="btn btn-danger opt2">즉시 구매</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    </div>
+    <table id="wrapper">
+        <tr>
+        <td id="left">
+            <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                        <img src="images/candle1.png" class="d-block w-100" alt="candle1">
+                        </div>
+                        <div class="carousel-item">
+                        <img src="images/candle2.png" class="d-block w-100" alt="candle2">
+                        </div>
+                        <div class="carousel-item">
+                        <img src="images/candle3.png" class="d-block w-100" alt="candle3">
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                    </div>
+        </td>
+        <td id="right">
+            <span style="background-color: rgb(253, 21, 137); color: white;">9,700원 이상 무료배송 </span><br>
+            <span style="color: grey;">100% 콩 추출 소이 왁스 사용</span>
+            <h5>[원더쿠폰] 네이센트 소이 캔들 향초<br>
+            실내 방향제 소이 캔들 7oz(220ml)</h5>
+            <button type="button" class="btn btn-secondary q" data-toggle="tooltip" data-placement="right" title="기준 가격 산정이 어려워 위메프가 제시하는 합리적인 가격입니다.">
+            위메프가?
+            </button>
+            <h6 style="color:red; margin-right: 20px;">위메프가</h6><h2>8,900<span>원 外</span></h2>
+            <button type="button" class="btn btn-outline-danger">쿠폰 다운받기</button>
+            <hr>
+            <p class="num"><b>790</b>개 구매</p>
+            <form action="#">
+                <select name="향선택" class="choose">
+                  <option value="choice">향선택</option>
+                  <option value="01">01_면심지_7oz버가못</option>
+                  <option value="02">01_면심지_7oz블랙체리</option>
+                  <option value="03">01_면심지_7oz샌달우드N머스크</option>
+                  <option value="04">01_면심지_7oz웨딩데이</option>
+                </select>
+            </form>
+            <hr>
+            <p class="price"><span>총상품금액</span><span class="won"><b>0</b>원</span></p>
+            <table id="menu">
+                <tr>
+                    <td style="padding: 20px;"><a href="#" class="link_test">버튼</a></td>
+                    <td><button type="button" class="btn btn-light">장바구니 담기 ></button></td>
+                    <td><button type="button" class="btn btn-danger">구매하기 ></button></td>
+                </tr>
+            </table>
+        </td>
+        </tr>
+    </table>
+    <div id="wrapper2">
+        <div class="row">
+            <div class="col-xs-12" style="width: 100%;">
+              <nav>
+                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true" style="margin-left:0;">딜 상세정보</a>
+                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">상품정보</a>
+                  <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">구매후기</a>
+                  <a class="nav-item nav-link" id="nav-qna-tab" data-toggle="tab" href="#nav-qna" role="tab" aria-controls="nav-qna" aria-selected="false">Q&A</a>
+                  <a class="nav-item nav-link" id="nav-change-tab" data-toggle="tab" href="#nav-change" role="tab" aria-controls="nav-change" aria-selected="false">안심교환반품</a>
+                  <a class="nav-item nav-link" id="nav-delay-tab" data-toggle="tab" href="#nav-delay" role="tab" aria-controls="nav-delay" aria-selected="false" style="margin-right:0;">배송지연 보상제</a>
+                </div>
+              </nav>
+              <div class="tab-content py-3 px-3 px-sm-0" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                 <img src="http://img.wemep.co.kr/banner/delivery_banner_manager/201606/30/e3b7fe0e100ae3a5a4bf9dacb031b85afd02104d.png" style="width:100%;">
+                  <table id="wrapper3">
+                      <tr>
+                          <td id="notice">구매정보</td>
+                          <td id="notice">안내사항</td>
+                      </tr>
+                      <tr>
+                        <td id="notice">
+                            <p id="notice_content">상품 출고전 주문 취소와 배송상태 확인은 마이페이지의 구매목록을 이용해주세요.<br>
+                            '상품준비중'상태에서는 즉시취소 가능합니다. '상품출고대기' 이후부터는 '취소신청'(출고중지요청)만 가능하여 출고여부 확인후 취소 가능여부가 결정됩니다.</p>
+                            <span id="span_color">[배송정보]</span><br>
+                            <ul id="list">
+                                <li>1인당 구매가능수량: 100개</li>
+                                <li>택배사: CJ대한통운</li>
+                                <li>배송비: 9,700원 이상 무료배송<br>
+                                    (9,700원 미만시 유료 2500원)<br>
+                                    20개까지 묶음배송 가능</li>
+                                <li>상품 출고일 : 당일출고(공휴일/주말 제외)</li>
+                                <li>특이사항: 배송 특이사항 - 군부대 사서함 배송불가 - 제주, 도서지역 추가 5,000원</li>
+                            </ul>
+                        </td>
+                        <td id="notice">
+                          <p id="notice_content">
+                            <span id="span_color">[반품기간]</span><br>
+                            상품수령일로 부터 7일 이내 반품 가능합니다.<br>
+                            - 고객변심의 경우 왕복 택배비 5,000원 (1개 기준) 부담<br>
+                            - 도서 산간 지역 추가 운임 발생<br>
+                            - 지정택배 이용부탁 드립니다.<br><br>
+                            <span id="span_color">[반품 기준]</span><br>
+                            단, 7일 이내라도 제품 사용, 훼손된 경우 반품이 어렵습니다.<br>
+                            기타 반품제한 사항<br>
+                            - 화장품/화장지/세제,세정/기타 위생용품 류 : 개봉으로 인해 스티커/포장재가 훼손된 경우<br>
+                            문의/요청 사항이 있으신 경우 1:1문의를 통해 접수 부탁드립니다.<br><br>
+                            반품/제조처, 원산지, 제조일자, 용량: 상품정보 및 상세페이지 참고<br>
+                            사용 방법: 상품정보 및 상세페이지 참고<br>
+                            제품 문의 안내: 상품정보 및 상세페이지 참고</p>
+                        </td>
+                      </tr>
+                  </table>
+                  <img src="http://img.wemep.co.kr/deal/4/352/3653524/9506b8b11d17055b46664d51249609c3c059af12_slice_0.jpg" width=100%;>
+                </div>
+                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                  <img src="images/content.png" width=100%;>  
+                </div>
+                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                <div id="review_div">
+                    <div id="star">
+                    <span style="margin:0;">구매고객 총별점 <small style="color:darkgray">(총 <span style="color:rgb(204, 52, 82)">41</span>건 구매후기 기준)</small></span><br>
+                    <div class="starRev">
+                        <span class="starR on">별1</span>
+                        <span class="starR on">별2</span>
+                        <span class="starR on">별3</span>
+                        <span class="starR on">별4</span>
+                        <span class="starR on2">별5</span>
+                      </div>
+                    </div>
+                    <button type="button" class="btn btn-danger review">구매후기 작성</button>
+                </div>
+                <p><small style="color:darkgray">· 구매후기는 구매완료 후 마이페이지 > 구매목록에서 작성하실 수 있습니다.</small></p>
+                </div>
+                <div class="tab-pane fade" id="nav-qna" role="tabpanel" aria-labelledby="nav-about-tab">
+                <div id="qna">
+                    <p style="display:inline-block;"><span style="color:red; font-size:30px;"><b>Q&A</b></span>　딜에 대해서 궁금한 점을 물어보세요!</p>
+                    <button id="q">자주 묻는 질문</button>
+                    <p style="display:inline-block; font-size:12px; color:rgb(124, 124, 124); line-height:15px;">
+                        · 구매하신 상품에 관한 교환/환불 관련 문의는 마이페이지 내 1:1문의를 이용해주세요.<br>
+                        ·  Q&A 게시판을 통한 취소나 환불, 교환, 반품신청은 처리되지 않습니다.<br>
+                        · 본 상품과 관련되지 않은 내용이나, 비방, 홍보글, 도배글, 개인정보가 포함된 글은 예고 없이 삭제됩니다.<br>
+                        · 홈페이지 에러/장애, 티켓/쿠폰 오류 문의는 고객센터 또는 1:1문의를 이용해주세요.<br>
+                    </p>
+                    <textarea rows="3" cols="100"></textarea>
+                    <button type="button" class="btn btn-outline-dark">등록</button>
+                </div>
+                </div>
+                <div class="tab-pane fade" id="nav-change" role="tabpanel" aria-labelledby="nav-about-chenge">
+                    <img src="images/change1.png" width=100%>
+                    <img src="images/change2.png" width=100%>
+                </div>
+                <div class="tab-pane fade" id="nav-delay" role="tabpanel" aria-labelledby="nav-about-delay">
+                    <img src="http://image.wemakeprice.com/images/resources/wmp/pages/deal_view/banner/img_delay_v16.jpg" width=100%;>
+                </div>
+              </div>
+            
+            </div>
+          </div>
+    </div>
+  </div>
+    </div>
+<script>
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip();
+  $("#fix_wrapper").hide();
+})
+$(".link_test").hover(
+        function(){
+            $(this).addClass('link_test_hover');
+        }, function(){
+            $(this).removeClass('link_test_hover');
+        }
+    );
+    $(".link_test").click(
+        function(e){
+            e.preventDefault();
+            $(this).toggleClass('link_test_click');
+        }
+    ); 
+
+    $(".btn.btn-danger.fix_btn").click(function(){
+        $("#fix_wrapper").css({"bottom":"0px"});
+        $(".btn.btn-dark.exit").show();
+        $("#fix3").hide();
+        $("#fix2").show();
+    });
+
+    $(".btn.btn-secondary.fix_btn").click(function(){
+        $("#fix_wrapper").css({"bottom":"0px"});
+        $(".btn.btn-dark.exit").show();
+        $("#fix2").hide();
+        $("#fix3").show();
+    });
+
+    $(".btn.btn-dark.exit").click(function(){
+        $("#fix_wrapper").css({"bottom":"-300px"});
+        $(this).hide();
+    });
+    
+    $(document).scroll(function() {
+    var y = $(this).scrollTop();
+    if (y > 600) {
+        $("#fix_wrapper").show();
+    } else {
+        $("#fix_wrapper").hide();
+    }
+    });
+    
+
+</script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
